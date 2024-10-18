@@ -2,7 +2,7 @@
 
 import { Link } from "../types/link";
 
-const UrlActions = ({ link, onClick }: { link: Link, onClick: () => void }) => (
+const LinkActions = ({ link, onClick }: { link: Link, onClick: () => void }) => (
     <div>
         <a href={link.url} target="_blank">
             Acessar
@@ -13,7 +13,7 @@ const UrlActions = ({ link, onClick }: { link: Link, onClick: () => void }) => (
     </div>
 );
 
-const UrlTable = ({ linkData }: { linkData: Link[] }) => (
+const LinkTable = ({ linkData, onDelete }: { linkData: Link[], onDelete: (id: number) => void}) => (
     <table>
         <thead>
             <tr>
@@ -25,11 +25,11 @@ const UrlTable = ({ linkData }: { linkData: Link[] }) => (
             {linkData.map(link => (
                 <tr key={link.url}>
                     <td>{link.url}</td>
-                    <td><UrlActions link={link} onClick={() => alert('delete')} /></td>
+                    <td><LinkActions link={link} onClick={() => onDelete(link.id)} /></td>
                 </tr>
             ))}
         </tbody>
     </table>
 );
 
-export default UrlTable;
+export default LinkTable;

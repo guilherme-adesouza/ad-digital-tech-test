@@ -1,10 +1,10 @@
 import { FormEventHandler } from "react";
 
-type UrlFormProps = {
+type LinkFormProps = {
     onSubmit: FormEventHandler;
 }
 
-const UrlForm = ({ onSubmit }: UrlFormProps) => {
+const LinkForm = ({ onSubmit }: LinkFormProps) => {
     return (
         <form onSubmit={onSubmit}>
             <input name="url" type="text" required/>
@@ -13,4 +13,4 @@ const UrlForm = ({ onSubmit }: UrlFormProps) => {
     );
 };
 
-export default UrlForm;
+export default LinkForm;

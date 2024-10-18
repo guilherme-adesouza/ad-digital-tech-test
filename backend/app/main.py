@@ -1,7 +1,8 @@
 import os
 from sqlite3 import IntegrityError
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, HttpUrl
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from typing import List
 import databases
 import sqlalchemy
@@ -25,14 +26,22 @@ youtube_links = sqlalchemy.Table(
 # Create a FastAPI app
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['http://localhost:3000'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
+
 # Create the database tables
 engine = sqlalchemy.create_engine(DATABASE_URL)
 metadata.create_all(engine)
 
 class YouTubeLink(BaseModel):
-    url: HttpUrl
+    url: str
 
-@app.post("/links/", response_model=YouTubeLink)
+@app.post("/links/")
 async def create_link(link: YouTubeLink):
     query = youtube_links.insert().values(url=link.url)
     try:
@@ -41,13 +50,13 @@ async def create_link(link: YouTubeLink):
     except IntegrityError:
         raise HTTPException(status_code=400, detail="This URL already exists.")
 
-@app.get("/links/", response_model=List[YouTubeLink])
+@app.get("/links/")
 async def read_links():
     query = youtube_links.select()
     results = await database.fetch_all(query)
     return [{"id": row["id"], "url": row["url"]} for row in results]
 
-@app.delete("/links/{link_id}", response_model=YouTubeLink)
+@app.delete("/links/{link_id}")
 async def delete_link(link_id: int):
     query = youtube_links.select().where(youtube_links.c.id == link_id)
     link = await database.fetch_one(query)

@@ -1,29 +1,52 @@
 'use client';
 
-import { FormEvent } from "react";
-import UrlForm from "./components/UrlForm";
-import UrlTable from "./components/UrlTable";
+import { FormEvent, useEffect, useState } from "react";
+import LinkForm from "./components/LinkForm";
+import LinkTable from "./components/LinkTable";
 import styles from "./page.module.css";
 import { Link } from "./types/link";
+import LinkService from "./services/LinkService";
 
-const mock: Link[] = [
-  { id: 1, url: 'https://www.youtube.com/gaules' },
-  { id: 2, url: 'https://www.youtube.com/' },
-  { id: 3, url: 'https://youtu.be/s8EfR1YvYnM' },
-  { id: 4, url: 'https://www.youtube.com/shorts/BrWUeXTSOSU' },
-];
 
 export default function Home() {
-  function onSubmit(event: FormEvent<any>): void {
+  const [links, setLinks] = useState<Link[]>([]);
+
+  useEffect(() => {
+    fetchLinks();
+  }, []);
+
+  async function fetchLinks(): Promise<void> {
+    const result = await LinkService.getAll();
+    if (result) {
+      setLinks(result.data);
+    }
+  }
+
+  async function createLink(event: FormEvent<any>): Promise<void> {
     event.preventDefault();
-    console.log(event.currentTarget[0].value);
+    const link = event.currentTarget[0].value;
+    const result = await LinkService.create(link);
+    if (!result) {
+      alert('Erro ao criar o link, tente novamente.');
+    } else {
+      await fetchLinks();
+    }
+  }
+  
+  async function deleteLink(id: number) {
+    const result = await LinkService.removeById(id);
+    if (!result) {
+      alert('Erro ao deletar link, tente novamente.');
+    } else {
+      await fetchLinks();
+    }
   }
 
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <UrlForm onSubmit={onSubmit}/>
-        <UrlTable linkData={mock}/>
+        <LinkForm onSubmit={createLink}/>
+        <LinkTable linkData={links} onDelete={deleteLink}/>
       </main>
       <footer className={styles.footer}>
         Criado por Guilherme Augusto de Souza
