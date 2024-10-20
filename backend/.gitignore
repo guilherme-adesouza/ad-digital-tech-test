@@ -1,4 +1,4 @@
 # Remove local cache
-pycache/
+__pycache__/
 # Remove local env 
 .env
