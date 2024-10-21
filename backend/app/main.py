@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.domain.errors import ConflictError
 from app.schemas.url_schemas import LinkCreateSchema, LinkResponseSchema
 from app.application.use_cases import AddLinkUseCase, ListLinksUseCase, RemoveLinkUseCase
 from app.infrastructure.repositories import LinkRepository
@@ -28,6 +29,8 @@ async def create_url(url_data: LinkCreateSchema, db: AsyncSession = Depends(get_
     try:
         new_url = await use_case.execute(url_data.url)
         return new_url
+    except ConflictError as e:
+        raise HTTPException(status_code=422, detail=str(e))
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 

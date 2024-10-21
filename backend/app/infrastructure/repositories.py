@@ -23,3 +23,8 @@ class LinkRepository:
         result = await self.db.execute(stmt)
         await self.db.commit()
         return result.rowcount > 0
+
+    async def get_by_url(self, url: str) -> bool:
+        query = select(Link).where(Link.url == url)
+        result = await self.db.execute(query)
+        return result.scalar()
