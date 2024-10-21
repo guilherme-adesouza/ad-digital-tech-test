@@ -1,0 +1,41 @@
+.linkTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.linkTable th {
+    border-bottom: 1px solid;
+}
+
+.linkTable th, .linkTable td {
+    padding-top: 0.5rem;
+}
+
+
+.linkTable th:last-child {
+    border-bottom: 0;
+}
+
+.linkActions {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 0.25rem;
+}
+
+.linkActions a, .linkActions button {
+    background: none;
+	border: none;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+    border: 1px solid rgba(var(--gray-rgb));
+    color: transparent;  
+    text-shadow: 0 0 0 rgba(var(--gray-rgb));
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}
+
+.linkActions a:hover, .linkActions button:hover {
+    background-color: var(--gray-alpha-200);
+}

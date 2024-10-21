@@ -1,26 +1,21 @@
 'use client';
 
+import styles from "./link-table.module.css";
 import { Link } from "../types/link";
 
 const LinkActions = ({ link, onClick }: { link: Link, onClick: () => void }) => (
-    <div>
-        <a href={link.url} target="_blank">
-            Acessar
+    <div className={styles.linkActions}>
+        <a href={link.url} target="_blank" title="Acessar link">
+            🔗
         </a>
-        <button onClick={onClick} type="button">
-            Remover
+        <button onClick={onClick} type="button" title="Remover link">
+            ✖️
         </button>
     </div>
 );
 
 const LinkTable = ({ linkData, onDelete }: { linkData: Link[], onDelete: (id: number) => void}) => (
-    <table>
-        <thead>
-            <tr>
-                <th>Link</th>
-            </tr>
-            <tr></tr>
-        </thead>
+    <table className={styles.linkTable}>
         <tbody>
             {linkData.map(link => (
                 <tr key={link.url}>

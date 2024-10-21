@@ -1,24 +1,21 @@
 .page {
   --gray-rgb: 0, 0, 0;
+  --contrast-gray-rgb: 255, 255, 255;
   --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
   --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
 
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
 
-  display: grid;
-  grid-template-rows: 20px 1fr 20px;
-  align-items: center;
-  justify-items: center;
   min-height: 100svh;
   padding: 80px;
-  gap: 64px;
   font-family: var(--font-geist-sans);
 }
 
 @media (prefers-color-scheme: dark) {
   .page {
     --gray-rgb: 255, 255, 255;
+    --contrast-gray-rgb: 0, 0, 0;
     --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
     --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
 
@@ -45,10 +42,18 @@ a.secondary {
   min-width: 180px;
 }
 
-.footer {
-  grid-row-start: 3;
+.loading {
+  min-width: 32rem;
   display: flex;
-  gap: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
 }
 
 /* Enable hover only on non-touch devices */
@@ -62,11 +67,6 @@ a.secondary {
     background: var(--button-secondary-hover);
     border-color: transparent;
   }
-
-  .footer a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
 }
 
 @media (max-width: 600px) {
@@ -77,12 +77,6 @@ a.secondary {
 
   .main {
     align-items: center;
-  }
-
-  .footer {
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
   }
 }
 

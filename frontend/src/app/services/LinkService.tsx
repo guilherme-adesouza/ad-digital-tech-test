@@ -4,13 +4,13 @@ const apiFetch = async (route: string, options?: RequestInit) => {
     try {
         const response = await fetch(`${API_URL}${route}`, options);
         if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
+            return { error: true, status: response.status };
         }
         const json = await response.json();
         return { data: json };
     } catch (error: any) {
         console.error(error.message);
-        return null;
+        return { error, status: 500 };
     }
 }
 

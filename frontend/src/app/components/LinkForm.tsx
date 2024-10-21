@@ -1,3 +1,4 @@
+import styles from "./link-form.module.css";
 import { FormEventHandler } from "react";
 
 type LinkFormProps = {
@@ -6,9 +7,9 @@ type LinkFormProps = {
 
 const LinkForm = ({ onSubmit }: LinkFormProps) => {
     return (
-        <form onSubmit={onSubmit}>
-            <input name="url" type="text" required/>
-            <input type="submit" />
+        <form className={styles.linkForm} onSubmit={onSubmit}>
+            <input name="url" type="text" placeholder="Digite uma URL do Youtube aqui"required/>
+            <button type="submit">Enviar</button>
         </form>
     );
 };

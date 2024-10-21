@@ -9,7 +9,7 @@ import LinkService from "./services/LinkService";
 
 
 export default function Home() {
-  const [links, setLinks] = useState<Link[]>([]);
+  const [links, setLinks] = useState<Link[]|null>(null);
 
   useEffect(() => {
     fetchLinks();
@@ -17,19 +17,24 @@ export default function Home() {
 
   async function fetchLinks(): Promise<void> {
     const result = await LinkService.getAll();
-    if (result) {
+    if (result.data) {
       setLinks(result.data);
+      return;
     }
+    setLinks([]);
   }
 
-  async function createLink(event: FormEvent<any>): Promise<void> {
+  async function createLink(event: FormEvent<any>): Promise<any> {
     event.preventDefault();
     const link = event.currentTarget[0].value;
     const result = await LinkService.create(link);
-    if (!result) {
-      alert('Erro ao criar o link, tente novamente.');
+    if (result.error) {
+      alert(result.status === 422 ? 
+        'Link já cadastrado'
+        :  'Erro ao criar o link, tente novamente');
     } else {
       await fetchLinks();
+      event.target.reset();
     }
   }
   
@@ -44,13 +49,14 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
+      <h1 className={styles.title}>Link Keeper</h1>
       <main className={styles.main}>
         <LinkForm onSubmit={createLink}/>
-        <LinkTable linkData={links} onDelete={deleteLink}/>
+        {!links ? 
+          <div className={styles.loading}>Carregando...</div> : 
+          <LinkTable linkData={links} onDelete={deleteLink}/>
+        }
       </main>
-      <footer className={styles.footer}>
-        Criado por Guilherme Augusto de Souza
-      </footer>
     </div>
   );
 }
