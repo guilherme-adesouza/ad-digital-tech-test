@@ -7,6 +7,16 @@ import styles from "./page.module.css";
 import { Link } from "./types/link";
 import LinkService from "./services/LinkService";
 
+const CREATION_ERRORS = {
+  400: 'URL não pertence ao Youtube',
+  422: 'Link já cadastrado',
+  500: 'Ocorreu um erro inesperado, tente novamente',
+}
+
+function getErrorMessage(statusCode: number) {
+  return CREATION_ERRORS[statusCode as keyof typeof CREATION_ERRORS] || CREATION_ERRORS[500]
+}
+
 
 export default function Home() {
   const [links, setLinks] = useState<Link[]|null>(null);
@@ -29,9 +39,7 @@ export default function Home() {
     const link = event.currentTarget[0].value;
     const result = await LinkService.create(link);
     if (result.error) {
-      alert(result.status === 422 ? 
-        'Link já cadastrado'
-        :  'Erro ao criar o link, tente novamente');
+      alert(getErrorMessage(result.status || 500));
     } else {
       await fetchLinks();
       event.target.reset();
